@@ -27,7 +27,7 @@ setup(
     install_requires=["qpimage",
                       "qpsphere",
                       "numpy>=1.12.0",
-                      ]
+                      ],
     setup_requires=['pytest-runner'],
     tests_require=["pytest"],
     python_requires='>=3.6, <4',
