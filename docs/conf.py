@@ -39,7 +39,6 @@ release = version #@UndefinedVariable
 # http://www.sphinx-doc.org/en/stable/ext/autodoc.html#confval-autodoc_member_order
 # Order class attributes and functions in separate blocks
 autodoc_member_order = 'bysource'
-autodoc_mock_imports = install_requires
 autoclass_content = 'both'
 
 # Display link to GitHub repo instead of doc on rtfd
