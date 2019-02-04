@@ -1,0 +1,34 @@
+notifications:
+  email: false
+language: python
+python:
+- '3.6'
+env:
+  matrix:
+  - TEST="PYTEST"
+  - TEST="FLAKE8"
+install:
+- travis_retry pip install --no-deps .
+# coverage packages
+- travis_retry pip install flake8
+- travis_retry pip install codecov coverage
+- pip freeze
+script:
+- if [ "${TEST}" == "PYTEST" ]; then
+       coverage run --source=cellsino setup.py test;
+       coverage report -m;
+       codecov;
+  else
+       flake8 drymass;
+       flake8 examples;
+       flake8 tests;
+  fi;
+deploy:
+  provider: pypi
+  user: "ci_qpi"
+  password:
+    secure: "pK63pHWU9yV/jzqRXSG23+hnwb11UwmvbYL9jSohZLDzBHcexUHvhCE/dcyErpkeZa+iHtUMB1WTNFj79tdndGrnqWHarodhe0mjkEX1CYkDcwP/y3EVZxgZBp55wVFE2HL29iwjiRp1j3GqNrM489Td0ojbPVumpzsXAPR2L5lhS7Kxk6XkxEe3A1Z6dyNHVlwRRshS69UqDRefbb6BS5R/MkzndfHt1IVaiy1Sy96Gk1pOgQvj95fABUZ5akUDiHcPleMknPUn03e4RKbE2PtiRr2wqzl/gfrSKAC6g9zRiMUjpQ3nURCMZC+CLQ/lwopMJwo2ubJ8sEL+1RRVOU/qQhQjHEeCRl6FW22e49AutWzehrjSEOyf73O31CC2oq4Dc7GmZxPBpoJiwuum74NkgpsYUiPhuBcWx9nV+ohkPX1VU4rj6JQtubofj8ciyfPVBuGZA+Ne20W4i9auZLCqim8Se8Lqq7JQpdA6Z9ATKZoQAOuQu9GbfBL4MF468TmMoOmgSzYs+eBqN5rGgCF+Z5Pla9Zdl6+jGMmiHfXcqojOcYEpZFSWaalxZ9u0G5nEuvO8K/MpPxPwOoVnJqwDFVnGWkUWhSHvvc0J2+/rMyYBkBXlVRBxBQ458XKIEEbdiCSEb72x7TOcgajW6e560A2x1EqMyVysHrAAuxM="
+  on:
+    tags: true
+  distributions: "sdist bdist_wheel"
+  skip_existing: true
