@@ -8,7 +8,7 @@ env:
   - TEST="PYTEST"
   - TEST="FLAKE8"
 install:
-- travis_retry pip install --no-deps .
+- travis_retry pip install .
 # coverage packages
 - travis_retry pip install flake8
 - travis_retry pip install codecov coverage
