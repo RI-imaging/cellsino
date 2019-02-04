@@ -3,7 +3,7 @@
 
 Cellsino is a Python library for generating sinograms (phase and fluorescence)
 of cell phantoms for testing tomographic reconstruction algorithms.
-This is the documentation of DryMass version |release|.
+This is the documentation of cellsino version |release|.
 
 
 Documentation
