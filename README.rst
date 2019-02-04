@@ -4,7 +4,7 @@ cellsino
 |PyPI Version| |Tests Status| |Coverage Status| |Docs Status|
 
 
-**cellsino** is a Python library for generating sinograms (phase and
+**Cellsino** is a Python library for generating sinograms (phase and
 fluorescence) of cell phantoms for testing tomographic reconstruction algorithms.
 
 

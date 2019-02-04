@@ -19,14 +19,33 @@
 
 # -- Project information -----------------------------------------------------
 
+import os.path as op
+import sys
+# include parent directory
+pdir = op.dirname(op.dirname(op.abspath(__file__)))
+sys.path.insert(0, pdir)
+# include extenstions
+sys.path.append(op.abspath('extensions'))
+
+
 project = 'cellsino'
 copyright = '2019, Paul Müller'
 author = 'Paul Müller'
 
-# The short X.Y version
-version = ''
-# The full version, including alpha/beta/rc tags
-release = ''
+exec(open(op.join(pdir, "cellsino/_version.py")).read())
+release = version #@UndefinedVariable
+
+
+# http://www.sphinx-doc.org/en/stable/ext/autodoc.html#confval-autodoc_member_order
+# Order class attributes and functions in separate blocks
+autodoc_member_order = 'bysource'
+autodoc_mock_imports = install_requires
+autoclass_content = 'both'
+
+# Display link to GitHub repo instead of doc on rtfd
+rst_prolog = """
+:github_url: https://github.com/RI-imaging/cellsino
+"""
 
 
 # -- General configuration ---------------------------------------------------
@@ -77,7 +96,7 @@ pygments_style = None
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = 'alabaster'
+html_theme = 'default'
 
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
