@@ -1,0 +1,5 @@
+mock
+numpy
+qpimage
+sphinx>=1.6.4
+sphinxcontrib.bibtex
