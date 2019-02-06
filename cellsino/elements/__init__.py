@@ -1,3 +1,3 @@
-from .sphere import Sphere
+from .el_sphere import Sphere
 
 available = [Sphere]
