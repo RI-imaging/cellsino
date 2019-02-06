@@ -11,7 +11,7 @@ def test_translation():
                      points=points)
 
     el2 = el.transform(x=1, y=2, z=-3)
-    assert np.all(el2.points[0] == [1 ,2, -3])
+    assert np.all(el2.points[0] == [1, 2, -3])
 
 
 if __name__ == "__main__":
