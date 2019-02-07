@@ -1,6 +1,7 @@
 import abc
 
 import numpy as np
+import qpimage
 
 from ..elements import Sphere
 
@@ -21,14 +22,22 @@ class BasePropagator(object):
         self.wavelength = wavelength
         self.pixel_size = pixel_size
         self.grid_size = grid_size
-        self.center = np.array(self.grid_size) / 2 - .5
+        gx, gy = grid_size
+        #: center of the volume used
+        self.center = np.array([gx, gy, 0]) / 2 - .5
 
     def propagate(self):
         field = np.ones(self.grid_size, dtype=np.complex256)
         for element in self.phantom:
             if isinstance(element, Sphere):
-                field *= self.propagate_sphere(element)
-        return field
+                field *= self.propagate_sphere(element).field
+        qpifull = qpimage.QPImage(data=field,
+                                  which_data="field",
+                                  meta_data={"wavelength": self.wavelength,
+                                             "pixel size": self.pixel_size,
+                                             }
+                                  )
+        return qpifull
 
     @abc.abstractmethod
     def propagate_sphere(self, sphere):

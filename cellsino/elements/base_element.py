@@ -51,25 +51,29 @@ class BaseElement(object):
           Third, the points are rotated about the z-axis (``rot_in_plane``,
           within the imaging plane).
         """
+        # In ODTbrain convention, x -> -y and y -> x.
+        alpha = -rot_main
+        beta = rot_perp_plane
+        gamma = rot_in_plane
         Rx = np.array([
-                      [1,                      0,                       0],
-                      [0, np.cos(rot_perp_plane), -np.sin(rot_perp_plane)],
-                      [0, np.sin(rot_perp_plane),  np.cos(rot_perp_plane)],
+                      [1,             0,              0],
+                      [0, np.cos(alpha), -np.sin(alpha)],
+                      [0, np.sin(alpha),  np.cos(alpha)],
                       ])
 
         Ry = np.array([
-                      [np.cos(rot_main),  0, np.sin(rot_main)],
-                      [0,                 1,                0],
-                      [-np.sin(rot_main), 0, np.cos(rot_main)],
+                      [np.cos(beta),  0, np.sin(beta)],
+                      [0,             1,            0],
+                      [-np.sin(beta), 0, np.cos(beta)],
                       ])
 
         Rz = np.array([
-                      [np.cos(rot_in_plane), -np.sin(rot_in_plane), 0],
-                      [np.sin(rot_in_plane),  np.cos(rot_in_plane), 0],
-                      [0,                                        0, 1]
+                      [np.cos(gamma), -np.sin(gamma), 0],
+                      [np.sin(gamma),  np.cos(gamma), 0],
+                      [0,          0,                 1],
                       ])
 
-        R = np.dot(np.dot(Rx, Rz), Ry)
+        R = np.dot(np.dot(Ry, Rz), Rx)
         rotated = np.dot(R, self.points.T).T
         rotated_pad = np.pad(rotated, ((0, 0), (0, 1)), mode="constant",
                              constant_values=1)

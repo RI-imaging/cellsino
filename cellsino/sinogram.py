@@ -16,7 +16,7 @@ class Sinogram(object):
 
     def compute(self, angles, path=None, propagator="rytov"):
         if isinstance(angles, int):
-            angles = np.linspace(0, 2*np.pi, endpoint=False)
+            angles = np.linspace(0, 2*np.pi, angles, endpoint=False)
 
         if path:
             write = True
@@ -34,28 +34,23 @@ class Sinogram(object):
                                    self.grid_size[1]),
                                   dtype=float)
 
-        qpi_meta_data = {"wavelength": self.wavelength,
-                         "pixel size": self.pixel_size,
-                         }
-
         for ii, ang in enumerate(angles):
+            print(ii)
             ph = self.phantom.transform(rot_main=ang)
+
             pp = pp_dict[propagator](phantom=ph,
                                      wavelength=self.wavelength,
                                      pixel_size=self.pixel_size,
                                      grid_size=self.grid_size)
 
-            field = pp.propagate()
+            qpi = pp.propagate()
 
             if write:
                 with h5py.File(path, "a") as h5:
                     qps = qpimage.QPSeries(h5file=h5.require_group("qpseries"))
-                    qpi = qpimage.QPImage(data=field,
-                                          which_data="field",
-                                          meta_data=qpi_meta_data)
                     qps.add_qpimage(qpi)
             else:
-                sino_fields[ii] = field
+                sino_fields[ii] = qpi.field
 
         if write:
             return path

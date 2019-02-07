@@ -26,7 +26,7 @@ setup(
     long_description=open('README.rst').read() if exists('README.rst') else '',
     install_requires=["h5py>=2.7.0",
                       "qpimage",
-                      "qpsphere",
+                      "qpsphere>=0.5.0",
                       "numpy>=1.12.0",
                       ],
     setup_requires=['pytest-runner'],

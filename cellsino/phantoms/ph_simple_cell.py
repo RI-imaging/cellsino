@@ -20,37 +20,40 @@ class SimpleCell(BasePhantom):
             - 2 small nucleoli (full fluorescence)
         """
         nleoi1 = Sphere(radius=1.5e-6,
-                        position=(-.25, 2, 2),
-                        fl_intensity=nucleoli_fl-nucleus_fl,
-                        n_object=medium_index+(nucleoli_index-nucleus_index),
+                        center=(-.25e-6, 2e-6, 2e-6),
+                        fl_brightness=nucleoli_fl-nucleus_fl,
+                        object_index=medium_index +
+                        (nucleoli_index-nucleus_index),
                         medium_index=medium_index,
                         )
 
         nleoi2 = Sphere(radius=1.5e-6,
-                        position=(+.25, -1, 2),
-                        fl_intensity=nucleoli_fl-nucleus_fl,
-                        n_object=medium_index+(nucleoli_index-nucleus_index),
+                        center=(+.25e-6, -1e-6, 2e-6),
+                        fl_brightness=nucleoli_fl-nucleus_fl,
+                        object_index=medium_index +
+                        (nucleoli_index-nucleus_index),
                         medium_index=medium_index,
                         )
 
         nuclus = Sphere(radius=4e-6,
-                        position=(0, 1, 1),
-                        fl_intensity=nucleus_shell_fl,
-                        n_object=medium_index+(nucleus_index-cytoplasm_index),
+                        center=(0e-6, 1e-6, 1e-6),
+                        fl_brightness=nucleus_shell_fl,
+                        object_index=medium_index +
+                        (nucleus_index-cytoplasm_index),
                         medium_index=medium_index,
                         )
 
         nuclus_shell = Sphere(radius=3.8e-6,
-                              position=(0, 1, 1),
-                              fl_intensity=nucleus_fl-nucleus_shell_fl,
-                              n_object=medium_index,
+                              center=(0e-6, 1e-6, 1e-6),
+                              fl_brightness=nucleus_fl-nucleus_shell_fl,
+                              object_index=medium_index,
                               medium_index=medium_index,
                               )
 
         cyto = Sphere(radius=5.5e-6,
-                      position=(0, 0, 0),
-                      fl_intensity=cytoplasm_fl,
-                      n_object=cytoplasm_index,
+                      center=(0, 0, 0),
+                      fl_brightness=cytoplasm_fl,
+                      object_index=cytoplasm_index,
                       medium_index=medium_index,
                       )
         self.elements = [nleoi1, nleoi2, nuclus, nuclus_shell, cyto]

@@ -1,5 +1,9 @@
-from .rytov import Rytov
+from .pp_rytov import Rytov
+from .pp_projection import Projection
 
-available = [Rytov]
+dictionary = {
+    "projection": Projection,
+    "rytov": Rytov,
+}
 
-dictionary = {"rytov": Rytov}
+available = sorted(dictionary.keys())

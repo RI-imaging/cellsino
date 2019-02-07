@@ -1,6 +1,6 @@
 class BasePhantom(object):
-    def __init__(self, elements=[]):
-        self.elements = elements
+    def __init__(self):
+        self.elements = []
 
     def __iter__(self):
         for el in self.elements:
