@@ -2,7 +2,7 @@
 
 This example uses :ref:`ODTbrain<odtbrain:index>` and
 :ref:`radontea<radontea:index>` for the reconstruction of the refractive
-index and the fluorescence of the simple cell phantom.
+index and the fluorescence sinogram of the simple cell phantom.
 The reconstruction is compared to the ground truth of the cell phantom.
 """
 import cellsino
