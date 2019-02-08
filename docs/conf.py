@@ -60,6 +60,9 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx.ext.viewcode',
+    'sphinxcontrib.bibtex',
+    'fancy_include',
+    'github_changelog',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -199,4 +202,8 @@ epub_exclude_files = ['search.html']
 # -- Options for intersphinx extension ---------------------------------------
 
 # Example configuration for intersphinx: refer to the Python standard library.
-intersphinx_mapping = {'https://docs.python.org/': None}
+intersphinx_mapping = {"python": ('https://docs.python.org/', None),
+                       "drymass": ('http://drymass.readthedocs.io/en/stable', None),
+                       "odtbrain": ('http://odtbrain.readthedocs.io/en/stable', None),
+                       "radontea": ('http://radontea.readthedocs.io/en/stable', None),
+                       }

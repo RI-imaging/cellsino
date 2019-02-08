@@ -1,4 +1,5 @@
 0.1.0
+ - add basic example to docs 
  - drawing refractive index and fluorescence phantoms
  - sinogram generation
  - basic functionalities (sphere element):

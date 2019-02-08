@@ -9,12 +9,19 @@ This is the documentation of cellsino version |release|.
 Documentation
 =============
 
+.. toctree::
+   :maxdepth: 4
 
+   sec_introduction
+   sec_getting_started
+   sec_examples
+   sec_code_reference
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
 
+   sec_changelog
+   zsec_bib
 
 
 Indices and tables
