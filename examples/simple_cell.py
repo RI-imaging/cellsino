@@ -72,7 +72,7 @@ plotkwfl = {"vmax": fl.max(),
             "cmap": "Greens_r",
             }
 
-ax1 = plt.subplot(221, title="refractive index (ground_truth)")
+ax1 = plt.subplot(221, title="refractive index (ground truth)")
 mapper = ax1.imshow(rimod[idx].real, **plotkwri)
 plt.colorbar(mappable=mapper, ax=ax1)
 
