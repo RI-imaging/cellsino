@@ -1,2 +1,9 @@
+0.1.0
+ - drawing refractive index and fluorescence phantoms
+ - sinogram generation
+ - basic functionalities (sphere element):
+   - simple cell phantom
+   - propagators: Rytov and projection
+   - fluorescence projector
 0.0.1
  - initial setup

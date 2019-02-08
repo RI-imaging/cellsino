@@ -29,17 +29,23 @@ class Sphere(BaseElement):
                                      fl_brightness=fl_brightness,
                                      points=points)
 
-    def draw(self, pixel_size, grid_size):
-        ri = self.medium_index * np.ones(grid_size, dtype=float)
+    @property
+    def center(self):
+        return self.points[0]
+
+    def draw(self, grid_size, pixel_size):
+        ri = np.ones(grid_size, dtype=float) * self.medium_index
+        fl = np.zeros(grid_size, dtype=float)
         center = np.array(grid_size) / 2 - .5
         x = (np.arange(grid_size[0]) - center[0]) * pixel_size
         y = (np.arange(grid_size[1]) - center[1]) * pixel_size
         z = (np.arange(grid_size[2]) - center[2]) * pixel_size
 
-        xx, yy, zz = np.meshgrid(x, y, z, indexing="ij")
-        cx, cy, cz = self.center
+        xx, yy, zz = np.meshgrid(x, y, z, indexing="ij", sparse=True)
+        cy, cz, cx = self.center
 
         volume = (cx-xx)**2 + (cy-yy)**2 + (cz-zz)**2
         inside = volume <= self.radius**2
         ri[inside] = self.object_index
-        return ri
+        fl[inside] = self.fl_brightness
+        return ri, fl

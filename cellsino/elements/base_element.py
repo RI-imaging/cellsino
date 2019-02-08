@@ -17,7 +17,7 @@ class BaseElement(object):
         fl_brightness: float
             Fluorescence brightness
         points: 2d ndarray
-            Coordinates of the element the element
+            Coordinates of the element [m]
 
         Notes
         -----
@@ -35,6 +35,16 @@ class BaseElement(object):
         #: variable is used for affine transforms (e.g. when rotating
         #: the object).
         self.points = np.array(points)
+
+    def draw(self, grid_size, pixel_size):
+        ri = np.ones(grid_size, dtype=float) * self.medium_index
+        fl = np.zeros(grid_size, dtype=float)
+        for pp in self.points:
+            # ODTbrain convention
+            cy, cz, cx = np.array(pp/pixel_size, dtype=int)
+            ri[cx, cy, cz] = self.object_index
+            fl[cx, cy, cz] = self.fl_brightness
+        return ri, fl
 
     def transform(self, x=0, y=0, z=0, rot_main=0, rot_in_plane=0,
                   rot_perp_plane=0):

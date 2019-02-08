@@ -7,7 +7,7 @@ class Projection(BasePropagator):
     """Projection approximation"""
 
     def propagate_sphere(self, sphere):
-        center = self.center + sphere.points[0]/self.pixel_size
+        center = self.center + sphere.center/self.pixel_size
         qpi = qpsphere.models.projection(radius=sphere.radius,
                                          sphere_index=sphere.object_index,
                                          medium_index=sphere.medium_index,

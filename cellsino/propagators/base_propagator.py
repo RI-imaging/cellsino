@@ -9,7 +9,7 @@ from ..elements import Sphere
 class BasePropagator(object):
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, phantom, wavelength, pixel_size, grid_size):
+    def __init__(self, phantom, grid_size, pixel_size, wavelength):
         """Base propagator
 
         Notes

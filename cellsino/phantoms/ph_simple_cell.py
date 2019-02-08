@@ -57,3 +57,4 @@ class SimpleCell(BasePhantom):
                       medium_index=medium_index,
                       )
         self.elements = [nleoi1, nleoi2, nuclus, nuclus_shell, cyto]
+        self.medium_index = medium_index
