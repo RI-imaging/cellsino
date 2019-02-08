@@ -31,6 +31,7 @@ sys.path.append(op.abspath('extensions'))
 project = 'cellsino'
 copyright = '2019, Paul Müller'
 author = 'Paul Müller'
+github_project = 'RI-imaging/' + project
 
 exec(open(op.join(pdir, "cellsino/_version.py")).read())
 release = version #@UndefinedVariable
