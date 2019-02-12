@@ -52,8 +52,11 @@ class Sinogram(object):
                     qps = qpimage.QPSeries(h5file=h5.require_group("qpseries"))
                     qps.add_qpimage(qpi)
 
-                    h5fl = h5.require_group("fluorescence")
-                    h5fl.create_dataset("{}".format(ii), data=fluor)
+                    h5fl = h5.require_group("flseries")
+                    h5fl.create_dataset("fl_{}".format(ii),
+                                        data=fluor,
+                                        fletcher32=True,
+                                        compression="gzip")
             else:
                 sino_fields[ii] = qpi.field
                 sino_fluor[ii] = fluor
