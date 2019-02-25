@@ -1,9 +1,9 @@
 from .pp_rytov import Rytov
 from .pp_projection import Projection
 
-dictionary = {
+prop_dict = {
     "projection": Projection,
     "rytov": Rytov,
 }
 
-available = sorted(dictionary.keys())
+available = sorted(prop_dict.keys())

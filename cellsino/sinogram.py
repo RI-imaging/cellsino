@@ -5,17 +5,25 @@ import numpy as np
 import qpimage
 
 from .fluorescence import Fluorescence
-from .propagators import dictionary as pp_dict
+from .propagators import prop_dict
+from .phantoms import phan_dict
 
 
 class Sinogram(object):
     def __init__(self, phantom, wavelength, pixel_size, grid_size):
-        self.phantom = phantom
+        if isinstance(phantom, str):
+            self.phantom = phan_dict[phantom]()
+        else:
+            self.phantom = phantom
         self.wavelength = wavelength
         self.pixel_size = pixel_size
         self.grid_size = grid_size
 
-    def compute(self, angles, path=None, propagator="rytov"):
+    def compute(self, angles, path=None, propagator="rytov",
+                count=None, max_count=None):
+        if max_count is not None:
+            max_count.value += angles.size
+
         if isinstance(angles, int):
             angles = np.linspace(0, 2*np.pi, angles, endpoint=False)
 
@@ -38,10 +46,10 @@ class Sinogram(object):
         for ii, ang in enumerate(angles):
             ph = self.phantom.transform(rot_main=ang)
 
-            pp = pp_dict[propagator](phantom=ph,
-                                     grid_size=self.grid_size,
-                                     pixel_size=self.pixel_size,
-                                     wavelength=self.wavelength)
+            pp = prop_dict[propagator](phantom=ph,
+                                       grid_size=self.grid_size,
+                                       pixel_size=self.pixel_size,
+                                       wavelength=self.wavelength)
             qpi = pp.propagate()
             fluor = Fluorescence(phantom=ph,
                                  grid_size=self.grid_size,
@@ -60,6 +68,9 @@ class Sinogram(object):
             else:
                 sino_fields[ii] = qpi.field
                 sino_fluor[ii] = fluor
+
+            if count is not None:
+                count.value += 1
 
         if write:
             return path
