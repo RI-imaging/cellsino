@@ -33,9 +33,11 @@ class BasePropagator(object):
                 field *= self.propagate_sphere(element).field
         qpifull = qpimage.QPImage(data=field,
                                   which_data="field",
-                                  meta_data={"wavelength": self.wavelength,
-                                             "pixel size": self.pixel_size,
-                                             }
+                                  meta_data={
+                                      "wavelength": self.wavelength,
+                                      "pixel size": self.pixel_size,
+                                      "medium index": self.phantom.medium_index,
+                                      }
                                   )
         return qpifull
 

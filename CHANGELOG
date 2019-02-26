@@ -1,5 +1,6 @@
 0.2.0
  - feat: add capability to track progress of sinogram generation
+ - fix: medium index not stored in exported sinogram file
 0.1.0
  - add basic example to docs 
  - drawing refractive index and fluorescence phantoms
