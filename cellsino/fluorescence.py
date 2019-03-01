@@ -5,7 +5,7 @@ from .elements import Sphere
 
 class Fluorescence(object):
 
-    def __init__(self, phantom, grid_size, pixel_size):
+    def __init__(self, phantom, grid_size, pixel_size, displacement=(0, 0)):
         """Fluorescence projector
 
         Notes
@@ -20,6 +20,8 @@ class Fluorescence(object):
         gx, gy = grid_size
         #: center of the volume used
         self.center = np.array([gx, gy, 0]) / 2 - .5
+        self.center[0] += displacement[0]
+        self.center[1] += displacement[1]
 
     def project(self):
         fluor = np.zeros(self.grid_size, dtype=float)

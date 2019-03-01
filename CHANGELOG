@@ -1,5 +1,7 @@
 0.2.0
  - feat: add capability to track progress of sinogram generation
+ - feat: add possibility to add (random) displacements for each
+   sinogram slice
  - fix: medium index not stored in exported sinogram file
 0.1.0
  - add basic example to docs 

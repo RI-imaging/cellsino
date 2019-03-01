@@ -19,13 +19,47 @@ class Sinogram(object):
         self.pixel_size = pixel_size
         self.grid_size = grid_size
 
-    def compute(self, angles, path=None, propagator="rytov",
-                count=None, max_count=None):
+    def compute(self, angles, displacements=None, propagator="rytov",
+                path=None, count=None, max_count=None):
+        """Compute sinogram data
+
+        Parameters
+        ----------
+        angles: 1d array of size N or int
+            If an array, defines the angular positions for each frame
+            of the rotation. If an int, defines the number of angles
+            of a steady rotation from 0 to 2π.
+        displacements: 2d ndarray of shape (N, 2) or float
+            A float value indicates the standard deviation of a
+            Gaussian noise distribution (using
+            :func:`numpy.random.normal`) in pixels.
+            A 2d array directly specifies the x-y-displacement for each
+            frame in pixels.
+        propagator: str
+            The propagator to use. Must be in
+            :data:`cellsino.propagators.available`.
+        path: str or pathlib.Path
+            If not None, the data will be written to this file and
+            a :class:`pathlib.Path` object will be returned.
+        count: multiprocessing.Value
+            May be used for tracking progress. At each computed
+            angle `count.value` is incremented by one.
+        max_count: multiprocessing.Value
+            May be used for tracking progress. This value is
+            incremented by `N`.
+        """
         if max_count is not None:
             max_count.value += angles.size
 
         if isinstance(angles, int):
             angles = np.linspace(0, 2*np.pi, angles, endpoint=False)
+
+        if displacements is None:
+            displacements = np.zeros((angles.shape[0], 2))
+        elif isinstance(displacements, float):
+            np.random.seed(47)  # for reproducibility
+            displacements = np.random.normal(scale=displacements,
+                                             size=(angles.shape[0], 2))
 
         if path:
             write = True
@@ -49,11 +83,13 @@ class Sinogram(object):
             pp = prop_dict[propagator](phantom=ph,
                                        grid_size=self.grid_size,
                                        pixel_size=self.pixel_size,
-                                       wavelength=self.wavelength)
+                                       wavelength=self.wavelength,
+                                       displacement=displacements[ii])
             qpi = pp.propagate()
             fluor = Fluorescence(phantom=ph,
                                  grid_size=self.grid_size,
-                                 pixel_size=self.pixel_size).project()
+                                 pixel_size=self.pixel_size,
+                                 displacement=displacements[ii]).project()
 
             if write:
                 with h5py.File(path, "a") as h5:
