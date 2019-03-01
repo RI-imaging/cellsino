@@ -97,7 +97,7 @@ class Sinogram(object):
                     qps.add_qpimage(qpi)
 
                     h5fl = h5.require_group("flseries")
-                    h5fl.create_dataset("fl_{}".format(ii),
+                    h5fl.create_dataset("fli_{}".format(ii),
                                         data=fluor,
                                         fletcher32=True,
                                         compression="gzip")
