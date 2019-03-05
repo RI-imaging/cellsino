@@ -1,4 +1,6 @@
 0.2.0
+ - feat: add option to roll rotational axis (in-plane) during
+   sinogram generation
  - feat: add capability to track progress of sinogram generation
  - feat: add possibility to add (random) displacements for each
    sinogram slice

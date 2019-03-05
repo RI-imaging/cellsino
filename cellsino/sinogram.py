@@ -19,8 +19,8 @@ class Sinogram(object):
         self.pixel_size = pixel_size
         self.grid_size = grid_size
 
-    def compute(self, angles, displacements=None, propagator="rytov",
-                path=None, count=None, max_count=None):
+    def compute(self, angles, axis_roll=0, displacements=None,
+                propagator="rytov", path=None, count=None, max_count=None):
         """Compute sinogram data
 
         Parameters
@@ -29,6 +29,8 @@ class Sinogram(object):
             If an array, defines the angular positions for each frame
             of the rotation. If an int, defines the number of angles
             of a steady rotation from 0 to 2π.
+        axis_roll: float
+            In-plane rotation of the rotational axis [rad].
         displacements: 2d ndarray of shape (N, 2) or float
             A float value indicates the standard deviation of a
             Gaussian noise distribution (using
@@ -78,7 +80,7 @@ class Sinogram(object):
                                   dtype=float)
 
         for ii, ang in enumerate(angles):
-            ph = self.phantom.transform(rot_main=ang)
+            ph = self.phantom.transform(rot_main=ang, rot_in_plane=axis_roll)
 
             pp = prop_dict[propagator](phantom=ph,
                                        grid_size=self.grid_size,
