@@ -1,5 +1,6 @@
 import pathlib
 
+import flimage
 import h5py
 import numpy as np
 import qpimage
@@ -88,24 +89,22 @@ class Sinogram(object):
                                        wavelength=self.wavelength,
                                        displacement=displacements[ii])
             qpi = pp.propagate()
-            fluor = Fluorescence(phantom=ph,
-                                 grid_size=self.grid_size,
-                                 pixel_size=self.pixel_size,
-                                 displacement=displacements[ii]).project()
+            fli = Fluorescence(phantom=ph,
+                               grid_size=self.grid_size,
+                               pixel_size=self.pixel_size,
+                               displacement=displacements[ii]
+                               ).project()
 
             if write:
                 with h5py.File(path, "a") as h5:
                     qps = qpimage.QPSeries(h5file=h5.require_group("qpseries"))
                     qps.add_qpimage(qpi)
 
-                    h5fl = h5.require_group("flseries")
-                    h5fl.create_dataset("fli_{}".format(ii),
-                                        data=fluor,
-                                        fletcher32=True,
-                                        compression="gzip")
+                    fls = flimage.FLSeries(h5file=h5.require_group("flseries"))
+                    fls.add_flimage(fli)
             else:
                 sino_fields[ii] = qpi.field
-                sino_fluor[ii] = fluor
+                sino_fluor[ii] = fli.fl
 
             if count is not None:
                 count.value += 1

@@ -1,3 +1,4 @@
+import flimage
 import numpy as np
 
 from .elements import Sphere
@@ -29,7 +30,13 @@ class Fluorescence(object):
             if isinstance(element, Sphere):
                 fluor += self.project_sphere(element)
 
-        return fluor
+        flifull = flimage.FLImage(
+                    data=fluor,
+                    meta_data={
+                        "pixel size": self.pixel_size,
+                        }
+                    )
+        return flifull
 
     def project_sphere(self, sphere):
         center = self.center + sphere.center/self.pixel_size
