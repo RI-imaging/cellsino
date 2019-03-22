@@ -1,3 +1,5 @@
+0.3.0
+ - feat: allow to define a measurement duration when generating sinograms
 0.2.1
  - ref: migrate to flimage
 0.2.0
