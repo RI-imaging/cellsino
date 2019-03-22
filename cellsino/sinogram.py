@@ -21,7 +21,7 @@ class Sinogram(object):
         self.grid_size = grid_size
 
     def compute(self, angles, axis_roll=0, displacements=None,
-                duration=3.0, propagator="rytov",
+                times=3.0, propagator="rytov",
                 path=None, count=None, max_count=None):
         """Compute sinogram data
 
@@ -39,10 +39,9 @@ class Sinogram(object):
             :func:`numpy.random.normal`) in pixels.
             A 2d array directly specifies the x-y-displacement for each
             frame in pixels.
-        duration: float
-            Measurement time of the full sinogram [s]. The frame rate is
-            always constant. Use the `angles` argument to simulate
-            varying rotation speeds.
+        times: 1d ndarray of size N or float
+            If an array, sets the measurement time of each frame
+            of the rotation. If a float, defines the measurement duration.
         propagator: str
             The propagator to use. Must be in
             :data:`cellsino.propagators.available`.
@@ -61,6 +60,9 @@ class Sinogram(object):
 
         if isinstance(angles, int):
             angles = np.linspace(0, 2*np.pi, angles, endpoint=False)
+
+        if isinstance(times, (int, float)):
+            times = np.linspace(0, times, angles.shape[0], endpoint=False)
 
         if displacements is None:
             displacements = np.zeros((angles.shape[0], 2))
@@ -85,8 +87,6 @@ class Sinogram(object):
                                    self.grid_size[1]),
                                   dtype=float)
 
-        frame_times = np.linspace(0, duration, len(angles), endpoint=False)
-
         for ii, ang in enumerate(angles):
             ph = self.phantom.transform(rot_main=ang, rot_in_plane=axis_roll)
             # QPI
@@ -103,8 +103,8 @@ class Sinogram(object):
                                displacement=displacements[ii]
                                ).project()
             # recording time of each sinogram slice
-            qpi["time"] = frame_times[ii]
-            fli["time"] = frame_times[ii]
+            qpi["time"] = times[ii]
+            fli["time"] = times[ii]
 
             if write:
                 with h5py.File(path, "a") as h5:
