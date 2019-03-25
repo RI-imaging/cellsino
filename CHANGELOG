@@ -1,6 +1,7 @@
 0.3.0
- - feat: allow to specify a measurement duration or the frame times
-   when generating sinograms
+ - feat: new options for sinogram generation
+   - measurement duration (or specific times per angle)
+   - specify simulated imaging modalities
 0.2.1
  - ref: migrate to flimage
 0.2.0

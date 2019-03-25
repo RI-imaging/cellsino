@@ -1,5 +1,3 @@
-import pathlib
-
 import flimage
 import h5py
 import numpy as np
@@ -21,7 +19,7 @@ class Sinogram(object):
         self.grid_size = grid_size
 
     def compute(self, angles, axis_roll=0, displacements=None,
-                times=3.0, propagator="rytov",
+                times=3.0, mode=["field", "fluorescence"], propagator="rytov",
                 path=None, count=None, max_count=None):
         """Compute sinogram data
 
@@ -42,8 +40,11 @@ class Sinogram(object):
         times: 1d ndarray of size N or float
             If an array, sets the measurement time of each frame
             of the rotation. If a float, defines the measurement duration.
+        mode: list of str
+            The imaging modalities to simulate. Valid strings are
+            "field" (quantitative phase imaging) and "fluorescence".
         propagator: str
-            The propagator to use. Must be in
+            The propagator to use for field computation. Must be in
             :data:`cellsino.propagators.available`.
         path: str or pathlib.Path
             If not None, the data will be written to this file and
@@ -54,7 +55,23 @@ class Sinogram(object):
         max_count: multiprocessing.Value
             May be used for tracking progress. This value is
             incremented by `N`.
+
+        Returns
+        -------
+        sinogram_fields, sinogram_fluorescence: 3d np.ndarray
+            Both sinograms are returned if `mode` is set to its
+            default value, otherwise, only one sinogram is returned.
+            If `path` is set, then the path is returned (no sinogram
+            data are written into memory).
         """
+        for mm in mode:
+            if mm not in ["field", "fluorescence"]:
+                raise ValueError("Invalid element in `mode`: `{}`".format(mm))
+        if len(mode) == 0:
+            raise ValueError("No `mode` specified!")
+        do_qps = "field" in mode
+        do_fls = "fluorescence" in mode
+
         if max_count is not None:
             max_count.value += angles.size
 
@@ -73,49 +90,52 @@ class Sinogram(object):
 
         if path:
             write = True
-            path = pathlib.Path(path)
-            if path.exists():
-                path.unlink()
         else:
             write = False
-            sino_fields = np.zeros((angles.size,
-                                    self.grid_size[0],
-                                    self.grid_size[1]),
-                                   dtype=complex)
-            sino_fluor = np.zeros((angles.size,
-                                   self.grid_size[0],
-                                   self.grid_size[1]),
-                                  dtype=float)
+            if do_qps:
+                sino_field = np.zeros((angles.size,
+                                       self.grid_size[0],
+                                       self.grid_size[1]),
+                                      dtype=complex)
+            if do_fls:
+                sino_fluor = np.zeros((angles.size,
+                                       self.grid_size[0],
+                                       self.grid_size[1]),
+                                      dtype=float)
 
         for ii, ang in enumerate(angles):
             ph = self.phantom.transform(rot_main=ang, rot_in_plane=axis_roll)
-            # QPI
-            pp = prop_dict[propagator](phantom=ph,
-                                       grid_size=self.grid_size,
-                                       pixel_size=self.pixel_size,
-                                       wavelength=self.wavelength,
-                                       displacement=displacements[ii])
-            qpi = pp.propagate()
-            # Fluorescence
-            fli = Fluorescence(phantom=ph,
-                               grid_size=self.grid_size,
-                               pixel_size=self.pixel_size,
-                               displacement=displacements[ii]
-                               ).project()
-            # recording time of each sinogram slice
-            qpi["time"] = times[ii]
-            fli["time"] = times[ii]
+            if do_qps:  # QPI
+                pp = prop_dict[propagator](phantom=ph,
+                                           grid_size=self.grid_size,
+                                           pixel_size=self.pixel_size,
+                                           wavelength=self.wavelength,
+                                           displacement=displacements[ii])
+                qpi = pp.propagate()
+                qpi["time"] = times[ii]
+            if do_fls:  # Fluorescence
+                fli = Fluorescence(phantom=ph,
+                                   grid_size=self.grid_size,
+                                   pixel_size=self.pixel_size,
+                                   displacement=displacements[ii]
+                                   ).project()
+                fli["time"] = times[ii]
 
             if write:
                 with h5py.File(path, "a") as h5:
-                    qps = qpimage.QPSeries(h5file=h5.require_group("qpseries"))
-                    qps.add_qpimage(qpi)
-
-                    fls = flimage.FLSeries(h5file=h5.require_group("flseries"))
-                    fls.add_flimage(fli)
+                    if do_qps:
+                        qps = qpimage.QPSeries(
+                            h5file=h5.require_group("qpseries"))
+                        qps.add_qpimage(qpi)
+                    if do_fls:
+                        fls = flimage.FLSeries(
+                            h5file=h5.require_group("flseries"))
+                        fls.add_flimage(fli)
             else:
-                sino_fields[ii] = qpi.field
-                sino_fluor[ii] = fli.fl
+                if do_qps:
+                    sino_field[ii] = qpi.field
+                if do_fls:
+                    sino_fluor[ii] = fli.fl
 
             if count is not None:
                 count.value += 1
@@ -123,4 +143,9 @@ class Sinogram(object):
         if write:
             return path
         else:
-            return sino_fields, sino_fluor
+            if do_qps and do_fls:
+                return sino_field, sino_fluor
+            elif do_qps:
+                return sino_field
+            else:
+                return sino_fluor
