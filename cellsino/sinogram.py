@@ -20,7 +20,7 @@ class Sinogram(object):
 
     def compute(self, angles, axis_roll=0, displacements=None,
                 times=3.0, mode=["field", "fluorescence"], propagator="rytov",
-                path=None, count=None, max_count=None):
+                bleach_decay=0, path=None, count=None, max_count=None):
         """Compute sinogram data
 
         Parameters
@@ -30,7 +30,7 @@ class Sinogram(object):
             of the rotation. If an int, defines the number of angles
             of a steady rotation from 0 to 2π.
         axis_roll: float
-            In-plane rotation of the rotational axis [rad].
+            In-plane rotation of the rotational axis [rad]
         displacements: 2d ndarray of shape (N, 2) or float
             A float value indicates the standard deviation of a
             Gaussian noise distribution (using
@@ -46,6 +46,8 @@ class Sinogram(object):
         propagator: str
             The propagator to use for field computation. Must be in
             :data:`cellsino.propagators.available`.
+        bleach_decay: float
+            Photobleaching decay constant [1/s]
         path: str or pathlib.Path
             If not None, the data will be written to this file and
             a :class:`pathlib.Path` object will be returned.
@@ -114,10 +116,12 @@ class Sinogram(object):
                 qpi = pp.propagate()
                 qpi["time"] = times[ii]
             if do_fls:  # Fluorescence
+                bleach_factor = np.exp(-bleach_decay*times[ii])
                 fli = Fluorescence(phantom=ph,
                                    grid_size=self.grid_size,
                                    pixel_size=self.pixel_size,
-                                   displacement=displacements[ii]
+                                   displacement=displacements[ii],
+                                   bleach_factor=bleach_factor,
                                    ).project()
                 fli["time"] = times[ii]
 

@@ -6,7 +6,8 @@ from .elements import Sphere
 
 class Fluorescence(object):
 
-    def __init__(self, phantom, grid_size, pixel_size, displacement=(0, 0)):
+    def __init__(self, phantom, grid_size, pixel_size, displacement=(0, 0),
+                 bleach_factor=1):
         """Fluorescence projector
 
         Notes
@@ -23,6 +24,9 @@ class Fluorescence(object):
         self.center = np.array([gx, gy, 0]) / 2 - .5
         self.center[0] += displacement[0]
         self.center[1] += displacement[1]
+        #: bleaching factor (image is multiplied by this factor
+        #: to simulate photobleaching)
+        self.bleach_factor = bleach_factor
 
     def project(self):
         fluor = np.zeros(self.grid_size, dtype=float)
@@ -31,7 +35,7 @@ class Fluorescence(object):
                 fluor += self.project_sphere(element)
 
         flifull = flimage.FLImage(
-                    data=fluor,
+                    data=fluor * self.bleach_factor,
                     meta_data={
                         "pixel size": self.pixel_size,
                         }
