@@ -20,7 +20,8 @@ class Sinogram(object):
 
     def compute(self, angles, axis_roll=0, displacements=None,
                 times=3.0, mode=["field", "fluorescence"], propagator="rytov",
-                bleach_decay=0, path=None, count=None, max_count=None):
+                bleach_decay=0, fluorescence_background=0, path=None,
+                count=None, max_count=None):
         """Compute sinogram data
 
         Parameters
@@ -48,6 +49,8 @@ class Sinogram(object):
             :data:`cellsino.propagators.available`.
         bleach_decay: float
             Photobleaching decay constant [1/s]
+        fluorescence_background: float
+            Overall fluorescence background signal
         path: str or pathlib.Path
             If not None, the data will be written to this file and
             a :class:`pathlib.Path` object will be returned.
@@ -122,6 +125,7 @@ class Sinogram(object):
                                    pixel_size=self.pixel_size,
                                    displacement=displacements[ii],
                                    bleach_factor=bleach_factor,
+                                   background=fluorescence_background,
                                    ).project()
                 fli["time"] = times[ii]
 

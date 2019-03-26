@@ -2,7 +2,7 @@
  - feat: new options for sinogram generation
    - measurement duration (or specific times per angle)
    - specify simulated imaging modalities
-   - simulate photobleaching
+   - simulate photobleaching and background fluorescence
 0.2.1
  - ref: migrate to flimage
 0.2.0
