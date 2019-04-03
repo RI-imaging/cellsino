@@ -3,10 +3,6 @@ notifications:
 language: python
 python:
 - '3.6'
-env:
-  matrix:
-  - TEST="PYTEST"
-  - TEST="FLAKE8"
 install:
 - travis_retry pip install .
 # coverage packages
@@ -14,15 +10,12 @@ install:
 - travis_retry pip install codecov coverage
 - pip freeze
 script:
-- if [ "${TEST}" == "PYTEST" ]; then
-       coverage run --source=cellsino setup.py test;
-       coverage report -m;
-       codecov;
-  else
-       flake8 drymass;
-       flake8 examples;
-       flake8 tests;
-  fi;
+- coverage run --source=cellsino setup.py test
+- coverage report -m
+- codecov
+- flake8 drymass
+- flake8 examples
+- flake8 tests
 deploy:
   provider: pypi
   user: "ci_qpi"
