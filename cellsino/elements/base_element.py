@@ -61,10 +61,9 @@ class BaseElement(object):
           Third, the points are rotated about the z-axis (``rot_in_plane``,
           within the imaging plane).
         """
-        # In ODTbrain convention, x -> -y and y -> x.
-        alpha = -rot_main
+        alpha = rot_main
         beta = rot_perp_plane
-        gamma = rot_in_plane
+        gamma = -rot_in_plane + np.pi/2  # rotate about y axis
         Rx = np.array([
                       [1,             0,              0],
                       [0, np.cos(alpha), -np.sin(alpha)],

@@ -3,6 +3,8 @@
    - measurement duration (or specific times per angle)
    - specify simulated imaging modalities
    - simulate photobleaching and background fluorescence
+ - BREAKING CHANGE: changed definition of angles in sinogram
+   generation
 0.2.1
  - ref: migrate to flimage
 0.2.0
