@@ -61,9 +61,12 @@ class BaseElement(object):
           Third, the points are rotated about the z-axis (``rot_in_plane``,
           within the imaging plane).
         """
-        alpha = rot_main
+        # The definition of the angles are such that the sinogram
+        # can be plugged right into ODTbrain/radontea without
+        # transposing it (when only `rot_main` is set).
+        alpha = -rot_main
         beta = rot_perp_plane
-        gamma = -rot_in_plane + np.pi/2  # rotate about y axis
+        gamma = rot_in_plane
         Rx = np.array([
                       [1,             0,              0],
                       [0, np.cos(alpha), -np.sin(alpha)],

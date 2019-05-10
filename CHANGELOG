@@ -1,3 +1,8 @@
+0.4.0
+ - BREAKING CHANGE: revert previous breaking change, because
+   this way the reconstruction with ODTbrain/radontea remains
+   straight-forward
+ - enh: support str in `mode` when computing sinograms
 0.3.0
  - feat: new options for sinogram generation
    - measurement duration (or specific times per angle)

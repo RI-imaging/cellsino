@@ -41,7 +41,7 @@ class Sinogram(object):
         times: 1d ndarray of size N or float
             If an array, sets the measurement time of each frame
             of the rotation. If a float, defines the measurement duration.
-        mode: list of str
+        mode: str or list of str
             The imaging modalities to simulate. Valid strings are
             "field" (quantitative phase imaging) and "fluorescence".
         propagator: str
@@ -69,6 +69,8 @@ class Sinogram(object):
             If `path` is set, then the path is returned (no sinogram
             data are written into memory).
         """
+        if not isinstance(mode, (list, tuple)):
+            mode = [mode]
         for mm in mode:
             if mm not in ["field", "fluorescence"]:
                 raise ValueError("Invalid element in `mode`: `{}`".format(mm))
