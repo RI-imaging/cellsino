@@ -1,4 +1,6 @@
-0.4.1
+0.5.0
+ - BREAKING CHANGE: switch from longdouble to double precision
+   in propagator
  - build: migrate from travisCI to GH Actions
  - build: setup.py test is deprecated
  - docs: refurbish docs

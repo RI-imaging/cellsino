@@ -30,7 +30,10 @@ class BasePropagator(object):
         self.center[1] += displacement[1]
 
     def propagate(self):
-        field = np.ones(self.grid_size, dtype=np.complex256)
+        # dtype was previously np.complex256 which caused tests to
+        # fail on Windows (no support). I assume that regular double
+        # precision is enough here.
+        field = np.ones(self.grid_size, dtype=np.complex128)
         for element in self.phantom:
             if isinstance(element, Sphere):
                 field *= self.propagate_sphere(element).field
