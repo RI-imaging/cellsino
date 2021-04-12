@@ -1,3 +1,6 @@
+0.4.1
+ - build: migrate from travisCI to GH Actions
+ - build: setup.py test is deprecated
 0.4.0
  - BREAKING CHANGE: revert previous breaking change, because
    this way the reconstruction with ODTbrain/radontea remains

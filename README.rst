@@ -29,13 +29,14 @@ Testing
 ::
 
     pip install -e .
-    python setup.py test
+    pip install pytest
+    pytest tests
     
 
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/cellsino.svg
    :target: https://pypi.python.org/pypi/cellsino
-.. |Tests Status| image:: https://img.shields.io/travis/RI-imaging/cellsino.svg
-   :target: https://travis-ci.com/RI-imaging/cellsino
+.. |Tests Status| image:: https://img.shields.io/github/workflow/status/RI-Imaging/qpimage/Checks
+   :target: https://github.com/RI-Imaging/qpimage/actions?query=workflow%3AChecks
 .. |Coverage Status| image:: https://img.shields.io/codecov/c/github/RI-imaging/cellsino/master.svg
    :target: https://codecov.io/gh/RI-imaging/cellsino
 .. |Docs Status| image:: https://readthedocs.org/projects/cellsino/badge/?version=latest
