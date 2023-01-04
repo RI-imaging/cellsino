@@ -35,7 +35,7 @@ Testing
 
 .. |PyPI Version| image:: https://img.shields.io/pypi/v/cellsino.svg
    :target: https://pypi.python.org/pypi/cellsino
-.. |Tests Status| image:: https://img.shields.io/github/workflow/status/RI-Imaging/qpimage/Checks
+.. |Tests Status| image:: https://img.shields.io/github/actions/workflow/status/RI-Imaging/qpimage/check.yml
    :target: https://github.com/RI-Imaging/qpimage/actions?query=workflow%3AChecks
 .. |Coverage Status| image:: https://img.shields.io/codecov/c/github/RI-imaging/cellsino/master.svg
    :target: https://codecov.io/gh/RI-imaging/cellsino
